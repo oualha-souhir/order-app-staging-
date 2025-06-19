@@ -1,5 +1,5 @@
 {
-  "name": "slack-order-management",
+  "name": "staging-order-app",
   "version": "1.0.0",
   "description": "",
   "main": "src/functions/index.js",

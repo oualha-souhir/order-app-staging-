@@ -663,7 +663,7 @@ async function handleOrderSlackApi(request, context) {
 
 		// ********************* $$$ ******************************************* */
 		if (command === "/caisse-test") {
-			console.log("** /caisse-test command received");
+			context.log("** /caisse-test command received");
 			const isUserAdmin = await isAdminUser(userId);
 			const isUserFinance = await isFinanceUser(userId);
 			if (!isUserAdmin && !isUserFinance) {
@@ -677,10 +677,16 @@ async function handleOrderSlackApi(request, context) {
 
 				setImmediate(async () => {
 					try {
-						const parsedRequest = await parseRefundFromText(text, logger);
-						logger.log(
-							`Parsed refund request: ${JSON.stringify(parsedRequest)}`
-						);
+						try {
+							const parsedRequest = await parseRefundFromText(text, logger);
+							context.log(
+								`Parsed refund request: ${JSON.stringify(parsedRequest)}`
+							);
+						} catch (error) {
+							context.log(`Error in parseRefundFromText: ${error.stack}`);
+							throw error;
+						}
+						
 
 						if (parsedRequest.montant && parsedRequest.devise) {
 							const channelId = params.get("channel_id");
@@ -978,9 +984,9 @@ async function handleOrderSlackApi(request, context) {
 
 			return;
 
-		// ********************* $$$ ******************************************* */
+			// ********************* $$$ ******************************************* */
 		} else if (command == "/payment-test") {
-			console.log("** /payment-test command received");
+			context.log("** /payment-test command received");
 			if (text.toLowerCase().includes("montant")) {
 				context.log(`Received payment text: "${text}"`);
 				context.log("Starting AI payment parsing...");
@@ -1221,9 +1227,9 @@ async function handleOrderSlackApi(request, context) {
 				],
 			});
 
-		// ********************* $$$ ******************************************* */
+			// ********************* $$$ ******************************************* */
 		} else if (command == "/order-test") {
-			console.log("** order-test command received");
+			context.log("** order-test command received");
 
 			if (!text.trim()) {
 				console.log("** no text");
