@@ -64,36 +64,4 @@ app.http("slackInteractions", {
 	},
 });
 
-app.timer("delayMonitoring", {
-	// schedule: "*/3 * * * *", // Every hour at :00 (e.g., 12:00, 1:00)
 
-	schedule: "0 0 * * * *", // Every hour at :00 (e.g., 12:00, 1:00)
-	handler: async (timer, context) => {
-		context.log("Running delay monitoring1111");
-
-		await checkPendingOrderDelays(context);
-		await checkPaymentDelays(context);
-		await checkProformaDelays(context);
-		context.log("Running delay monitoringéééé");
-
-		context.log("Delay monitoring completed");
-	},
-});
-
-app.timer("dailyReport", {
-	schedule: "0 5 9 * * *", // Daily at 9:05 AM
-
-	handler: async (timer, context) => {
-		context.log("Running daily report");
-		await generateReport(context); 
-		await analyzeTrends(context);
-		await handleAICommand(
-			context, // Assuming logger is correctly defined
-			openai, // OpenAI client instance
-			Order, // Mongoose model for orders
-			notifyUserAI, // Function for sending notifications
-			createSlackResponse // Function for formatting Slack responses
-		);
-		context.log("Daily report completed");
-	},
-});
