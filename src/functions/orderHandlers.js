@@ -662,9 +662,8 @@ async function handleOrderSlackApi(request, context) {
 		const isUserAdmin = await isAdminUser(userId);
 
 		// ********************* $$$ ******************************************* */
-		if ((command === "/caisset") || (command === "/caisse-test")|| (command === "/caisse")) {
-
-			// if (command === "/caisse-test") {
+		if (command === "/caisse-test") {
+			console.log("** /caisse-test command received");
 			const isUserAdmin = await isAdminUser(userId);
 			const isUserFinance = await isFinanceUser(userId);
 			if (!isUserAdmin && !isUserFinance) {
@@ -978,9 +977,10 @@ async function handleOrderSlackApi(request, context) {
 			});
 
 			return;
-			// ********************* $$$ ******************************************* */
-		} else if ((command == "/paymentt") || (command == "/payment-test") || (command == "/payment")) {
-			// } else if (command == "/payment-test") {
+
+		// ********************* $$$ ******************************************* */
+		} else if (command == "/payment-test") {
+			console.log("** /payment-test command received");
 			if (text.toLowerCase().includes("montant")) {
 				context.log(`Received payment text: "${text}"`);
 				context.log("Starting AI payment parsing...");
@@ -1221,14 +1221,13 @@ async function handleOrderSlackApi(request, context) {
 				],
 			});
 
-			// ********************* $$$ ******************************************* */
-		} else if ((command == "/ordert") || (command == "/order-test") || (command === "/order")) {
-		// } else if (command == "/order-test") {
-
+		// ********************* $$$ ******************************************* */
+		} else if (command == "/order-test") {
+			console.log("** order-test command received");
 
 			if (!text.trim()) {
 				console.log("** no text");
-				return createSlackResponse(200, {  
+				return createSlackResponse(200, {
 					response_type: "ephemeral",
 					blocks: [
 						{
@@ -2170,17 +2169,6 @@ async function handleOrderSlackApi(request, context) {
 					});
 				}
 			}
-		} else if (
-			command !== "/order" &&
-			command !== "/payment" &&
-			command !== "/caisse"
-		) {
-			// Default response for unknown commands
-			return createSlackResponse(200, {
-				response_type: "ephemeral",
-				text: "❓ Commande inconnue. Utilisez `/order help` pour voir les commandes disponibles.",
-			});
-			// return createSlackResponse(400, "Commande inconnue");
 		}
 
 		// Add this condition to handle payment request text parsing
